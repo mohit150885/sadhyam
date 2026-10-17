@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// Deploy with:  firebase deploy --only firestore:rules
+// The admin panel writes through the server (Firebase Admin SDK), which
+// bypasses these rules. Browsers only get the access listed here.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Website content and images: anyone can read, nobody can write from the browser.
+    match /site_content/{page} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /site_media/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Published notifications appear in the website header.
+    match /notifications/{id} {
+      allow read: if resource.data.published == true;
+      allow write: if false;
+    }
+
+    // Students manage their own profile (they cannot block/unblock themselves).
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && !("blocked" in request.resource.data);
+      allow update: if request.auth != null && request.auth.uid == uid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["blocked", "uid", "createdAt"]);
+      allow delete: if false;
+    }
+
+    // Orders are created by the server (/api/checkout); students can read their own.
+    match /orders/{id} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    // Reviews: approved ones are public; signed-in students can submit pending ones.
+    match /reviews/{id} {
+      allow read: if resource.data.status == "approved";
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == "pending"
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && request.resource.data.comment is string
+        && request.resource.data.comment.size() <= 1000;
+      allow update, delete: if false;
+    }
+
+    // Contact form: anyone can send a message, nobody can read them from the browser.
+    match /support_queries/{id} {
+      allow create: if request.resource.data.message is string
+        && request.resource.data.message.size() <= 2000
+        && request.resource.data.status == "open";
+      allow read, update, delete: if false;
+    }
+
+    // Server-only collections.
+    match /coupons/{id} { allow read, write: if false; }
+    match /admins/{id} { allow read, write: if false; }
+    match /private_content/{id} { allow read, write: if false; }
+    match /media_library/{id} { allow read, write: if false; }
+  }
+}

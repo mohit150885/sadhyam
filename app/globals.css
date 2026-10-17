@@ -1,9 +1,238 @@
 @import "tailwindcss";
 
-html {
-  scroll-behavior: smooth;
+/* ------------------------------------------------------------------
+ * Brand colours. Tailwind generates bg-brand, text-brand, border-brand,
+ * bg-brand-50 ... from these. The admin "Theme" settings override
+ * --color-brand / --color-navy at runtime (see ThemeStyle.tsx), and every
+ * shade below is derived from them, so the whole site re-colours at once.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-brand: #f97316;
+  --color-brand-50: color-mix(in srgb, var(--color-brand) 8%, white);
+  --color-brand-100: color-mix(in srgb, var(--color-brand) 16%, white);
+  --color-brand-200: color-mix(in srgb, var(--color-brand) 32%, white);
+  --color-brand-300: color-mix(in srgb, var(--color-brand) 55%, white);
+  --color-brand-400: color-mix(in srgb, var(--color-brand) 80%, white);
+  --color-brand-600: color-mix(in srgb, var(--color-brand) 88%, black);
+  --color-brand-700: color-mix(in srgb, var(--color-brand) 74%, black);
+  --color-navy: #021424;
+  --color-navy-800: color-mix(in srgb, var(--color-navy) 85%, white);
+
+  --font-sans: var(--site-font, "Inter"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-script: "Kalam", "Segoe Script", cursive;
+
+  /* Extra-wide screens: the full search box only appears from 1600px up. */
+  --breakpoint-3xl: 100rem;
 }
+
+/* ------------------------------------------------------------------
+ * Typography scale (taken from the home page and used on every page).
+ * Each token has a mobile value and a desktop value; the admin
+ * Theme settings can override any of these variables.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Header / navigation */
+  --fs-brand: 26px;            --fs-brand-d: 28px;
+  --fs-nav: 15px;
+  --fs-nav-link: 14px;         /* desktop menu links (Home, Courses, Test Series …) */
+  --fs-search: 14px;
+  --fs-profile-sub: 12px;
+
+  /* Hero */
+  --fs-hero-badge: 12px;       --fs-hero-badge-d: 13px;
+  --fs-hero-title: 36px;       --fs-hero-title-t: 48px;   --fs-hero-title-d: 60px;
+  --fs-hero-features: 13px;    --fs-hero-features-d: 15px;
+  --fs-hero-desc: 15px;        --fs-hero-desc-d: 17px;
+  --fs-hero-tab: 12px;         --fs-hero-tab-d: 13px;
+
+  /* Stats */
+  --fs-stat-num: 24px;         --fs-stat-num-d: 28px;
+  --fs-stat-label: 14px;       --fs-stat-label-d: 15px;
+
+  /* Section headings */
+  --fs-section-title: 28px;    --fs-section-title-d: 36px;
+  --fs-section-desc: 15px;     --fs-section-desc-d: 16px;
+
+  /* Cards */
+  --fs-card-title: 16px;
+  --fs-card-text: 13px;
+  --fs-badge: 11px;
+  --fs-meta: 13px;
+  --fs-price: 22px;
+  --fs-price-old: 14px;
+  --fs-discount: 12px;
+  --fs-tag: 12px;
+  --fs-tag-sm: 10px;
+
+  /* Faculty / results / testimonials */
+  --fs-faculty-name: 16px;
+  --fs-faculty-subject: 13px;
+  --fs-exp-badge: 11px;
+  --fs-rank: 18px;
+  --fs-result-name: 14px;
+  --fs-result-exam: 12px;
+  --fs-quote: 14px;
+  --fs-author: 15px;
+  --fs-author-role: 12px;
+
+  /* Call to action */
+  --fs-cta-title: 32px;        --fs-cta-title-d: 40px;
+  --fs-cta-desc: 15px;         --fs-cta-desc-d: 16px;
+  --fs-cta-tagline: 32px;
+
+  /* Footer */
+  --fs-footer-title: 16px;
+  --fs-footer-link: 14px;
+  --fs-store-sub: 9px;
+
+  /* Hero height — matches the home page hero at every screen size */
+  --fs-hero-h: 590px;          --fs-hero-h-t: 560px;      --fs-hero-h-d: 580px;
+  --hero-min-h: calc(var(--fs-hero-h) * var(--ui));
+
+  /* Body copy used inside detail pages, forms and legal pages */
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-button: 15px;
+  --fs-subheading: 20px;       --fs-subheading-d: 22px;
+}
+
+@layer components {
+  .t-brand { font-size: calc(var(--fs-brand) * var(--ui)); line-height: 1; }
+  .t-nav { font-size: calc(var(--fs-nav) * var(--ui)); }
+  .t-nav-link { font-size: calc(var(--fs-nav-link) * var(--ui)); line-height: 1.2; }
+  .t-search { font-size: calc(var(--fs-search) * var(--ui)); }
+  .t-profile-sub { font-size: calc(var(--fs-profile-sub) * var(--ui)); }
+
+  .t-hero-badge { font-size: calc(var(--fs-hero-badge) * var(--ui)); }
+  .t-hero-title { font-size: calc(var(--fs-hero-title) * var(--ui)); line-height: 1.05; letter-spacing: -0.025em; }
+  .t-hero-features { font-size: calc(var(--fs-hero-features) * var(--ui)); }
+  .t-hero-desc { font-size: calc(var(--fs-hero-desc) * var(--ui)); line-height: 1.6; }
+  .t-hero-tab { font-size: calc(var(--fs-hero-tab) * var(--ui)); }
+
+  .t-stat-num { font-size: calc(var(--fs-stat-num) * var(--ui)); line-height: 1; }
+  .t-stat-label { font-size: calc(var(--fs-stat-label) * var(--ui)); }
+
+  .t-section-title { font-size: calc(var(--fs-section-title) * var(--ui)); line-height: 1.15; letter-spacing: -0.02em; }
+  .t-section-desc { font-size: calc(var(--fs-section-desc) * var(--ui)); line-height: 1.5; }
+  .t-subheading { font-size: calc(var(--fs-subheading) * var(--ui)); line-height: 1.25; }
+
+  .t-card-title { font-size: calc(var(--fs-card-title) * var(--ui)); line-height: 1.3; }
+  .t-card-text { font-size: calc(var(--fs-card-text) * var(--ui)); line-height: 1.5; }
+  .t-badge { font-size: calc(var(--fs-badge) * var(--ui)); }
+  .t-meta { font-size: calc(var(--fs-meta) * var(--ui)); }
+  .t-price { font-size: calc(var(--fs-price) * var(--ui)); line-height: 1; }
+  .t-price-old { font-size: calc(var(--fs-price-old) * var(--ui)); }
+  .t-discount { font-size: calc(var(--fs-discount) * var(--ui)); }
+  .t-tag { font-size: calc(var(--fs-tag) * var(--ui)); }
+  .t-tag-sm { font-size: calc(var(--fs-tag-sm) * var(--ui)); }
+
+  .t-faculty-name { font-size: calc(var(--fs-faculty-name) * var(--ui)); }
+  .t-faculty-subject { font-size: calc(var(--fs-faculty-subject) * var(--ui)); }
+  .t-exp-badge { font-size: calc(var(--fs-exp-badge) * var(--ui)); }
+  .t-rank { font-size: calc(var(--fs-rank) * var(--ui)); }
+  .t-result-name { font-size: calc(var(--fs-result-name) * var(--ui)); }
+  .t-result-exam { font-size: calc(var(--fs-result-exam) * var(--ui)); }
+  .t-quote { font-size: calc(var(--fs-quote) * var(--ui)); line-height: 1.6; }
+  .t-author { font-size: calc(var(--fs-author) * var(--ui)); }
+  .t-author-role { font-size: calc(var(--fs-author-role) * var(--ui)); }
+
+  .t-cta-title { font-size: calc(var(--fs-cta-title) * var(--ui)); line-height: 1.15; }
+  .t-cta-desc { font-size: calc(var(--fs-cta-desc) * var(--ui)); line-height: 1.6; }
+  .t-cta-tagline { font-size: calc(var(--fs-cta-tagline) * var(--ui)); line-height: 1.2; }
+
+  .t-footer-title { font-size: calc(var(--fs-footer-title) * var(--ui)); }
+  .t-footer-link { font-size: calc(var(--fs-footer-link) * var(--ui)); }
+  .t-store-sub { font-size: calc(var(--fs-store-sub) * var(--ui)); }
+
+  .t-body { font-size: calc(var(--fs-body) * var(--ui)); line-height: 1.65; }
+  .t-small { font-size: calc(var(--fs-small) * var(--ui)); }
+  .t-button { font-size: calc(var(--fs-button) * var(--ui)); }
+
+  /* Tablet: hero title steps up */
+  @media (width >= 40rem) {
+    .t-brand { font-size: calc(var(--fs-brand-d) * var(--ui)); }
+    .t-hero-badge { font-size: calc(var(--fs-hero-badge-d) * var(--ui)); }
+    .t-hero-title { font-size: calc(var(--fs-hero-title-t) * var(--ui)); }
+    .t-hero-features { font-size: calc(var(--fs-hero-features-d) * var(--ui)); }
+    .t-hero-desc { font-size: calc(var(--fs-hero-desc-d) * var(--ui)); }
+    .t-hero-tab { font-size: calc(var(--fs-hero-tab-d) * var(--ui)); }
+    .t-stat-num { font-size: calc(var(--fs-stat-num-d) * var(--ui)); }
+    .t-stat-label { font-size: calc(var(--fs-stat-label-d) * var(--ui)); }
+    .t-section-title { font-size: calc(var(--fs-section-title-d) * var(--ui)); }
+    .t-section-desc { font-size: calc(var(--fs-section-desc-d) * var(--ui)); }
+    .t-subheading { font-size: calc(var(--fs-subheading-d) * var(--ui)); }
+    .t-cta-title { font-size: calc(var(--fs-cta-title-d) * var(--ui)); }
+    .t-cta-desc { font-size: calc(var(--fs-cta-desc-d) * var(--ui)); }
+  }
+
+  /* Desktop: hero title at full size */
+  @media (width >= 64rem) {
+    .t-hero-title { font-size: calc(var(--fs-hero-title-d) * var(--ui)); }
+  }
+
+  /* Hero size — identical on every page (home page is the reference). */
+  .hero-shell { position: relative; overflow: hidden; min-height: var(--hero-min-h); }
+  .hero-inner {
+    position: relative; z-index: 10; display: flex; align-items: center;
+    min-height: var(--hero-min-h); padding-block: 3rem;
+  }
+  .hero-content { width: 100%; max-width: 47.5rem; }
+  @media (width >= 40rem) { .hero-inner { padding-block: 4rem; } }
+
+  /* Shared layout container used by every section */
+  .container-site {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 87.5rem;          /* 1400px at normal size, grows on big screens */
+    padding-inline: 1rem;
+  }
+  @media (width >= 40rem) { .container-site { padding-inline: 1.5rem; } }
+  @media (width >= 64rem) { .container-site { padding-inline: 2.5rem; } }
+
+  /* Rich text from the admin (legal pages, descriptions) */
+  .prose-site h2 { font-size: calc(var(--fs-subheading) * var(--ui)); font-weight: 900; color: #0f172a; margin: 1.75rem 0 0.75rem; }
+  .prose-site h3 { font-size: calc(var(--fs-card-title) * var(--ui)); font-weight: 800; color: #0f172a; margin: 1.25rem 0 0.5rem; }
+  .prose-site p { font-size: calc(var(--fs-body) * var(--ui)); line-height: 1.75; color: #475569; margin: 0 0 1rem; }
+  .prose-site ul { list-style: disc; padding-left: 1.25rem; margin: 0 0 1rem; color: #475569; font-size: calc(var(--fs-body) * var(--ui)); line-height: 1.75; }
+  .prose-site a { color: var(--color-brand); font-weight: 700; }
+}
+
+
+/* ------------------------------------------------------------------
+ * Screen-size scaling (large monitors and TVs).
+ * Everything on the public site — text, spacing, cards, images, the
+ * container width — is sized in rem or multiplied by --ui, so raising
+ * --ui on wide screens enlarges the whole page proportionally instead of
+ * leaving a small desktop layout in the middle of a TV.
+ * Phones, tablets and normal laptops stay at --ui: 1 (unchanged).
+ * The admin panel is not scaled.
+ * ------------------------------------------------------------------ */
+:root { --ui: 1; }
+@media (width >= 1800px) { :root:has(.site-root) { --ui: 1.1; } }
+@media (width >= 2200px) { :root:has(.site-root) { --ui: 1.25; } }
+@media (width >= 2560px) { :root:has(.site-root) { --ui: 1.4; } }
+@media (width >= 3200px) { :root:has(.site-root) { --ui: 1.7; } }
+@media (width >= 3800px) { :root:has(.site-root) { --ui: 2; } }
+html { font-size: calc(16px * var(--ui)); }
+/* Icons are drawn at a fixed pixel size; zoom them by the same factor. */
+:root:has(.site-root) svg.lucide { zoom: var(--ui); }
+
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+input[type="range"] { accent-color: var(--color-brand); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--color-brand); }
+
+/* Hero height steps (unlayered so they override the base value) */
+@media (width >= 40rem) { :root { --hero-min-h: calc(var(--fs-hero-h-t) * var(--ui)); } }
+@media (width >= 64rem) { :root { --hero-min-h: calc(var(--fs-hero-h-d) * var(--ui)); } }

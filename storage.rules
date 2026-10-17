@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// Deploy with:  firebase deploy --only storage
+// Uploads happen on the server (Admin SDK). Uploaded files are public to read
+// through their download-token URL; browsers cannot write directly.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /site/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

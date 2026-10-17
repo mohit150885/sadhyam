@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+ * Brand colours. Tailwind generates bg-brand, text-brand, border-brand,
+ * bg-brand-50 ... from these. The admin "Theme" settings override
+ * --color-brand / --color-navy at runtime (see ThemeStyle.tsx), and every
+ * shade below is derived from them, so the whole site re-colours at once.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-brand: #f97316;
+  --color-brand-50: color-mix(in srgb, var(--color-brand) 8%, white);
+  --color-brand-100: color-mix(in srgb, var(--color-brand) 16%, white);
+  --color-brand-200: color-mix(in srgb, var(--color-brand) 32%, white);
+  --color-brand-300: color-mix(in srgb, var(--color-brand) 55%, white);
+  --color-brand-400: color-mix(in srgb, var(--color-brand) 80%, white);
+  --color-brand-600: color-mix(in srgb, var(--color-brand) 88%, black);
+  --color-brand-700: color-mix(in srgb, var(--color-brand) 74%, black);
+  --color-navy: #021424;
+  --color-navy-800: color-mix(in srgb, var(--color-navy) 85%, white);
+
+  --font-sans: var(--site-font, "Inter"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-script: "Kalam", "Segoe Script", cursive;
+}
+
+/* ------------------------------------------------------------------
+ * Typography scale (taken from the home page and used on every page).
+ * Each token has a mobile value and a desktop value; the admin
+ * Theme settings can override any of these variables.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Header / navigation */
+  --fs-brand: 26px;            --fs-brand-d: 28px;
+  --fs-nav: 15px;
+  --fs-search: 14px;
+  --fs-profile-sub: 12px;
+
+  /* Hero */
+  --fs-hero-badge: 12px;       --fs-hero-badge-d: 13px;
+  --fs-hero-title: 36px;       --fs-hero-title-t: 48px;   --fs-hero-title-d: 60px;
+  --fs-hero-features: 13px;    --fs-hero-features-d: 15px;
+  --fs-hero-desc: 15px;        --fs-hero-desc-d: 17px;
+  --fs-hero-tab: 12px;         --fs-hero-tab-d: 13px;
+
+  /* Stats */
+  --fs-stat-num: 24px;         --fs-stat-num-d: 28px;
+  --fs-stat-label: 14px;       --fs-stat-label-d: 15px;
+
+  /* Section headings */
+  --fs-section-title: 28px;    --fs-section-title-d: 36px;
+  --fs-section-desc: 15px;     --fs-section-desc-d: 16px;
+
+  /* Cards */
+  --fs-card-title: 16px;
+  --fs-card-text: 13px;
+  --fs-badge: 11px;
+  --fs-meta: 13px;
+  --fs-price: 22px;
+  --fs-price-old: 14px;
+  --fs-discount: 12px;
+  --fs-tag: 12px;
+  --fs-tag-sm: 10px;
+
+  /* Faculty / results / testimonials */
+  --fs-faculty-name: 16px;
+  --fs-faculty-subject: 13px;
+  --fs-exp-badge: 11px;
+  --fs-rank: 18px;
+  --fs-result-name: 14px;
+  --fs-result-exam: 12px;
+  --fs-quote: 14px;
+  --fs-author: 15px;
+  --fs-author-role: 12px;
+
+  /* Call to action */
+  --fs-cta-title: 32px;        --fs-cta-title-d: 40px;
+  --fs-cta-desc: 15px;         --fs-cta-desc-d: 16px;
+  --fs-cta-tagline: 32px;
+
+  /* Footer */
+  --fs-footer-title: 16px;
+  --fs-footer-link: 14px;
+  --fs-store-sub: 9px;
+
+  /* Hero height — matches the home page hero at every screen size */
+  --fs-hero-h: 590px;          --fs-hero-h-t: 560px;      --fs-hero-h-d: 580px;
+  --hero-min-h: var(--fs-hero-h);
+
+  /* Body copy used inside detail pages, forms and legal pages */
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-button: 15px;
+  --fs-subheading: 20px;       --fs-subheading-d: 22px;
+}
+
+@layer components {
+  .t-brand { font-size: var(--fs-brand); line-height: 1; }
+  .t-nav { font-size: var(--fs-nav); }
+  .t-search { font-size: var(--fs-search); }
+  .t-profile-sub { font-size: var(--fs-profile-sub); }
+
+  .t-hero-badge { font-size: var(--fs-hero-badge); }
+  .t-hero-title { font-size: var(--fs-hero-title); line-height: 1.05; letter-spacing: -0.025em; }
+  .t-hero-features { font-size: var(--fs-hero-features); }
+  .t-hero-desc { font-size: var(--fs-hero-desc); line-height: 1.6; }
+  .t-hero-tab { font-size: var(--fs-hero-tab); }
+
+  .t-stat-num { font-size: var(--fs-stat-num); line-height: 1; }
+  .t-stat-label { font-size: var(--fs-stat-label); }
+
+  .t-section-title { font-size: var(--fs-section-title); line-height: 1.15; letter-spacing: -0.02em; }
+  .t-section-desc { font-size: var(--fs-section-desc); line-height: 1.5; }
+  .t-subheading { font-size: var(--fs-subheading); line-height: 1.25; }
+
+  .t-card-title { font-size: var(--fs-card-title); line-height: 1.3; }
+  .t-card-text { font-size: var(--fs-card-text); line-height: 1.5; }
+  .t-badge { font-size: var(--fs-badge); }
+  .t-meta { font-size: var(--fs-meta); }
+  .t-price { font-size: var(--fs-price); line-height: 1; }
+  .t-price-old { font-size: var(--fs-price-old); }
+  .t-discount { font-size: var(--fs-discount); }
+  .t-tag { font-size: var(--fs-tag); }
+  .t-tag-sm { font-size: var(--fs-tag-sm); }
+
+  .t-faculty-name { font-size: var(--fs-faculty-name); }
+  .t-faculty-subject { font-size: var(--fs-faculty-subject); }
+  .t-exp-badge { font-size: var(--fs-exp-badge); }
+  .t-rank { font-size: var(--fs-rank); }
+  .t-result-name { font-size: var(--fs-result-name); }
+  .t-result-exam { font-size: var(--fs-result-exam); }
+  .t-quote { font-size: var(--fs-quote); line-height: 1.6; }
+  .t-author { font-size: var(--fs-author); }
+  .t-author-role { font-size: var(--fs-author-role); }
+
+  .t-cta-title { font-size: var(--fs-cta-title); line-height: 1.15; }
+  .t-cta-desc { font-size: var(--fs-cta-desc); line-height: 1.6; }
+  .t-cta-tagline { font-size: var(--fs-cta-tagline); line-height: 1.2; }
+
+  .t-footer-title { font-size: var(--fs-footer-title); }
+  .t-footer-link { font-size: var(--fs-footer-link); }
+  .t-store-sub { font-size: var(--fs-store-sub); }
+
+  .t-body { font-size: var(--fs-body); line-height: 1.65; }
+  .t-small { font-size: var(--fs-small); }
+  .t-button { font-size: var(--fs-button); }
+
+  /* Tablet: hero title steps up */
+  @media (width >= 40rem) {
+    .t-brand { font-size: var(--fs-brand-d); }
+    .t-hero-badge { font-size: var(--fs-hero-badge-d); }
+    .t-hero-title { font-size: var(--fs-hero-title-t); }
+    .t-hero-features { font-size: var(--fs-hero-features-d); }
+    .t-hero-desc { font-size: var(--fs-hero-desc-d); }
+    .t-hero-tab { font-size: var(--fs-hero-tab-d); }
+    .t-stat-num { font-size: var(--fs-stat-num-d); }
+    .t-stat-label { font-size: var(--fs-stat-label-d); }
+    .t-section-title { font-size: var(--fs-section-title-d); }
+    .t-section-desc { font-size: var(--fs-section-desc-d); }
+    .t-subheading { font-size: var(--fs-subheading-d); }
+    .t-cta-title { font-size: var(--fs-cta-title-d); }
+    .t-cta-desc { font-size: var(--fs-cta-desc-d); }
+  }
+
+  /* Desktop: hero title at full size */
+  @media (width >= 64rem) {
+    .t-hero-title { font-size: var(--fs-hero-title-d); }
+  }
+
+  /* Hero size — identical on every page (home page is the reference). */
+  .hero-shell { position: relative; overflow: hidden; min-height: var(--hero-min-h); }
+  .hero-inner {
+    position: relative; z-index: 10; display: flex; align-items: center;
+    min-height: var(--hero-min-h); padding-block: 48px;
+  }
+  .hero-content { width: 100%; max-width: 760px; }
+  @media (width >= 40rem) { .hero-inner { padding-block: 64px; } }
+
+  /* Shared layout container used by every section */
+  .container-site {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1400px;
+    padding-inline: 16px;
+  }
+  @media (width >= 40rem) { .container-site { padding-inline: 24px; } }
+  @media (width >= 64rem) { .container-site { padding-inline: 40px; } }
+
+  /* Rich text from the admin (legal pages, descriptions) */
+  .prose-site h2 { font-size: var(--fs-subheading); font-weight: 900; color: #0f172a; margin: 1.75rem 0 0.75rem; }
+  .prose-site h3 { font-size: var(--fs-card-title); font-weight: 800; color: #0f172a; margin: 1.25rem 0 0.5rem; }
+  .prose-site p { font-size: var(--fs-body); line-height: 1.75; color: #475569; margin: 0 0 1rem; }
+  .prose-site ul { list-style: disc; padding-left: 1.25rem; margin: 0 0 1rem; color: #475569; font-size: var(--fs-body); line-height: 1.75; }
+  .prose-site a { color: var(--color-brand); font-weight: 700; }
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+input[type="range"] { accent-color: var(--color-brand); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--color-brand); }
+
+/* Hero height steps (unlayered so they override the base value) */
+@media (width >= 40rem) { :root { --hero-min-h: var(--fs-hero-h-t); } }
+@media (width >= 64rem) { :root { --hero-min-h: var(--fs-hero-h-d); } }
